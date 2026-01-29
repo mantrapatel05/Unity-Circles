@@ -3,17 +3,34 @@
 
 {% block content %}
 <div class="container" style="padding-top: 2rem;">
-    <div style="margin-bottom: 2rem;">
-        <div class="flex-row gap-2" style="margin-bottom: 0.5rem;">
-            <i data-lucide="sparkles" style="color: var(--primary); width: 32px; height: 32px;"></i>
-            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">Communities</h1>
+    <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <div class="flex-row gap-2" style="margin-bottom: 0.5rem;">
+                <i data-lucide="sparkles" style="color: var(--primary); width: 32px; height: 32px;"></i>
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">Communities</h1>
+            </div>
+            <p style="color: var(--muted); font-size: 1.1rem;">Connect with peers who share your interests</p>
         </div>
-        <p style="color: var(--muted); font-size: 1.1rem;">Connect with peers who share your interests</p>
+        
+        {% if user.is_authenticated %}
+        <a href="{% url 'create_community' %}" class="btn btn-primary" style="
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        ">
+            <i data-lucide="plus" style="width: 20px;"></i>
+            Create Community
+        </a>
+        {% endif %}
     </div>
 
     <div class="grid-3">
         {% for community in communities %}
-        <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
             <div style="height: 160px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: var(--muted);">
                 {% if community.image %}
                     <img src="{{ community.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -21,27 +38,68 @@
                     Image
                 {% endif %}
             </div>
-            <div style="padding: 1.5rem;">
-                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">{{ community.name }}</h3>
-                <p style="font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem;">
+            <div style="padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">{{ community.name }}</h3>
+                <p style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.75rem;">
+                    <i data-lucide="user" style="width: 12px; display: inline;"></i>
+                    by {{ community.creator.username }}
+                </p>
+                <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
                     {{ community.description }}
                 </p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="font-size: 0.75rem; color: var(--muted); margin-bottom: 1rem; padding: 0.5rem; background: rgba(0,0,0,0.05); border-radius: 0.25rem;">
+                    📂 {{ community.get_category_display }}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                     <span style="font-size: 0.875rem; color: var(--muted);">
                         <i data-lucide="users" style="width: 14px; display: inline;"></i> {{ community.members.count }}
                     </span>
                     
-                    {% if user in community.members.all %}
-                        <span style="color: var(--primary); font-weight: 600; font-size: 0.875rem;">Joined</span>
+                    {% if user.is_authenticated %}
+                        {% if user in community.members.all %}
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span style="color: var(--primary); font-weight: 600; font-size: 0.875rem;">Joined</span>
+                                <form method="post" action="{% url 'leave_community' community.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" style="
+                                        background: none;
+                                        border: none;
+                                        color: var(--muted);
+                                        cursor: pointer;
+                                        font-size: 0.875rem;
+                                        padding: 0;
+                                        text-decoration: underline;
+                                    ">Leave</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <form method="post" action="{% url 'join_community' community.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Join</button>
+                            </form>
+                        {% endif %}
                     {% else %}
-                        <form method="post" action="{% url 'join_community' community.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Join</button>
-                        </form>
+                        <a href="{% url 'login' %}" style="font-size: 0.75rem; color: var(--primary); text-decoration: none;">
+                            Login to join
+                        </a>
                     {% endif %}
                 </div>
             </div>
         </div>
+        {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i data-lucide="inbox" style="width: 48px; height: 48px; color: var(--muted); margin-bottom: 1rem;"></i>
+                <p style="color: var(--muted); font-size: 1.1rem;">No communities yet</p>
+                {% if user.is_authenticated %}
+                    <p style="color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                        Be the first to <a href="{% url 'create_community' %}" style="color: var(--primary); text-decoration: none;">create a community</a>!
+                    </p>
+                {% else %}
+                    <p style="color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                        <a href="{% url 'login' %}" style="color: var(--primary); text-decoration: none;">Login</a> to create or join communities.
+                    </p>
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
 </div>

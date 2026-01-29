@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; max-width: 600px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 2rem;">
+        <a href="{% url 'communities' %}" style="display: flex; align-items: center; color: var(--muted); text-decoration: none; margin-bottom: 1.5rem;">
+            <i data-lucide="arrow-left" style="width: 16px; margin-right: 8px;"></i> Back to Communities
+        </a>
+        
+        <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">
+            Create Community
+        </h1>
+        <p style="color: var(--muted); font-size: 1.1rem;">
+            Start a new community and bring people together
+        </p>
+    </div>
+
+    <div class="card" style="padding: 2rem;">
+        
+        {% if form.non_field_errors %}
+            <div style="background: #fee; border: 1px solid #fcc; color: #c33; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Name Field -->
+            <div style="margin-bottom: 1.5rem;">
+                <label for="id_name" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">
+                    Community Name *
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <div style="color: #c33; font-size: 0.85rem; margin-top: 0.25rem;">
+                        {{ form.name.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Category Field -->
+            <div style="margin-bottom: 1.5rem;">
+                <label for="id_category" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">
+                    Category *
+                </label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div style="color: #c33; font-size: 0.85rem; margin-top: 0.25rem;">
+                        {{ form.category.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Description Field -->
+            <div style="margin-bottom: 1.5rem;">
+                <label for="id_description" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">
+                    Description *
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div style="color: #c33; font-size: 0.85rem; margin-top: 0.25rem;">
+                        {{ form.description.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Image Field -->
+            <div style="margin-bottom: 2rem;">
+                <label for="id_image" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">
+                    Community Image (optional)
+                </label>
+                {{ form.image }}
+                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;">
+                    Upload a banner image for your community (JPG, PNG, up to 5MB)
+                </p>
+                {% if form.image.errors %}
+                    <div style="color: #c33; font-size: 0.85rem; margin-top: 0.25rem;">
+                        {{ form.image.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" style="
+                width: 100%;
+                padding: 0.75rem;
+                font-size: 1rem;
+                font-weight: 600;
+                border: none;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            ">
+                <i data-lucide="plus" style="width: 20px;"></i>
+                Create Community
+            </button>
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}
