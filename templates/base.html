@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Circles - {% block title %}Connect & Grow{% endblock %}</title>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="nav-logo">
+                <i data-lucide="circles" style="color: var(--primary);"></i> Unity Circles
+            </a>
+            
+            <button id="mobile-menu-toggle" class="mobile-menu-btn">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <div class="nav-links" id="nav-links-container">
+                <a href="/dashboard/" class="nav-link">Dashboard</a>
+                <a href="/mentors/" class="nav-link">Mentors</a>
+                <a href="/communities/" class="nav-link">Communities</a>
+                <a href="/meetings/" class="nav-link">Meetings</a>
+                <a href="/messages/" class="nav-link">Messages</a>
+                
+                <a href="/profile/" class="avatar" id="profileBtn" style="display:none;">
+                    <span id="userInitial">U</span>
+                </a>
+                
+                <button id="logoutBtn" class="nav-link" style="background:none; border:none; margin-left:1rem; cursor: pointer; display:none;">
+                    <i data-lucide="log-out" style="width:20px;"></i>
+                </button>
+                
+                <a href="/login/" id="loginBtn" class="nav-link">Login</a>
+                <a href="/signup/" id="signupBtn" class="btn btn-primary" style="height: 2.5rem; font-size: 0.9rem;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script>
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const profileBtn = document.getElementById('profileBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (token) {
+                // User is logged in
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (signupBtn) signupBtn.style.display = 'none';
+                if (profileBtn) profileBtn.style.display = 'inline-flex';
+                if (logoutBtn) logoutBtn.style.display = 'inline-block';
+            } else {
+                // User is not logged in
+                if (loginBtn) loginBtn.style.display = 'inline-block';
+                if (signupBtn) signupBtn.style.display = 'inline-block';
+                if (profileBtn) profileBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+            }
+        }
+
+        // Logout function
+        function handleLogout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            alert('Logged out successfully!');
+            window.location.href = '/';
+        }
+
+        // Initialize
+        checkAuth();
+        if (document.getElementById('logoutBtn')) {
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        }
+    </script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

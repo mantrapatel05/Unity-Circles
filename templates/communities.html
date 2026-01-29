@@ -1,0 +1,48 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+    <div style="margin-bottom: 2rem;">
+        <div class="flex-row gap-2" style="margin-bottom: 0.5rem;">
+            <i data-lucide="sparkles" style="color: var(--primary); width: 32px; height: 32px;"></i>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">Communities</h1>
+        </div>
+        <p style="color: var(--muted); font-size: 1.1rem;">Connect with peers who share your interests</p>
+    </div>
+
+    <div class="grid-3">
+        {% for community in communities %}
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="height: 160px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: var(--muted);">
+                {% if community.image %}
+                    <img src="{{ community.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    Image
+                {% endif %}
+            </div>
+            <div style="padding: 1.5rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">{{ community.name }}</h3>
+                <p style="font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem;">
+                    {{ community.description }}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.875rem; color: var(--muted);">
+                        <i data-lucide="users" style="width: 14px; display: inline;"></i> {{ community.members.count }}
+                    </span>
+                    
+                    {% if user in community.members.all %}
+                        <span style="color: var(--primary); font-weight: 600; font-size: 0.875rem;">Joined</span>
+                    {% else %}
+                        <form method="post" action="{% url 'join_community' community.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Join</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

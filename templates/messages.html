@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+    <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 2rem;">Messages</h1>
+    
+    <div class="card" style="padding: 0; overflow: hidden; display: grid; grid-template-columns: 300px 1fr; height: 600px;">
+        <div style="border-right: 1px solid var(--border); background: #f8fafc; overflow-y: auto;">
+            <div style="padding: 1rem; border-bottom: 1px solid var(--border); font-weight: 700;">Conversations</div>
+            {% for convo in conversations %}
+            <a href="?user={{ convo.user.id }}" style="display: flex; gap: 0.75rem; padding: 1rem; text-decoration: none; color: inherit; border-bottom: 1px solid rgba(0,0,0,0.05); {% if active_user.id == convo.user.id %}background: #e2e8f0;{% endif %}">
+                <div class="avatar" style="width: 2.5rem; height: 2.5rem;">
+                    {{ convo.user.first_name|slice:":1" }}
+                </div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">{{ convo.user.get_full_name }}</div>
+                    <div style="font-size: 0.8rem; color: var(--muted);">Click to read</div>
+                </div>
+            </a>
+            {% empty %}
+            <div style="padding: 1rem; color: var(--muted); font-size: 0.9rem;">No conversations yet.</div>
+            {% endfor %}
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+            {% if active_user %}
+                <div style="padding: 1rem; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="avatar" style="width: 2rem; height: 2rem;">{{ active_user.first_name|slice:":1" }}</div>
+                    {{ active_user.get_full_name }}
+                </div>
+
+                <div style="flex: 1; padding: 1.5rem; overflow-y: auto; background: white; display: flex; flex-direction: column; gap: 1rem;">
+                    {% for msg in messages %}
+                    <div style="display: flex; justify-content: {% if msg.sender == user %}flex-end{% else %}flex-start{% endif %};">
+                        <div style="max-width: 70%; padding: 0.75rem 1rem; border-radius: 1rem; {% if msg.sender == user %}background: var(--primary); color: white; border-bottom-right-radius: 0.25rem;{% else %}background: var(--secondary); border-bottom-left-radius: 0.25rem;{% endif %}">
+                            {{ msg.content }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <form method="post" style="padding: 1rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem;">
+                    {% csrf_token %}
+                    <input type="hidden" name="recipient_id" value="{{ active_user.id }}">
+                    <input type="text" name="content" class="input" style="margin: 0; border-radius: 99px;" placeholder="Type a message...">
+                    <button type="submit" class="btn btn-primary" style="border-radius: 50%; width: 3rem; height: 3rem; padding: 0;">
+                        <i data-lucide="send" style="width: 18px;"></i>
+                    </button>
+                </form>
+            {% else %}
+                <div class="flex-center flex-col" style="flex: 1; color: var(--muted);">
+                    <i data-lucide="message-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.3;"></i>
+                    <p>Select a conversation to start messaging</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

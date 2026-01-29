@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem;">
+        Welcome back, {{ user.first_name }}
+    </h1>
+    
+    <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 2rem;">
+        <div class="card" style="padding: 1.5rem;">
+            <p style="font-size: 0.875rem; color: var(--muted);">Mentors</p>
+            <p style="font-size: 1.5rem; font-weight: 800;">{{ stats.mentors_count }}</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+            <p style="font-size: 0.875rem; color: var(--muted);">Communities</p>
+            <p style="font-size: 1.5rem; font-weight: 800;">{{ stats.communities_count }}</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+            <p style="font-size: 0.875rem; color: var(--muted);">Messages</p>
+            <p style="font-size: 1.5rem; font-weight: 800;">{{ stats.messages_count }}</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+            <p style="font-size: 0.875rem; color: var(--muted);">Meetings</p>
+            <p style="font-size: 1.5rem; font-weight: 800;">{{ stats.meetings_count }}</p>
+        </div>
+    </div>
+
+    <div class="grid-2" style="gap: 2rem;">
+        <div>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Recommended Mentors</h2>
+            <div class="flex-col gap-2">
+                {% for mentor in recommended_mentors %}
+                <div class="card" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
+                    <div class="avatar">
+                        {% if mentor.profile.photo %}
+                            <img src="{{ mentor.profile.photo.url }}">
+                        {% else %}
+                            {{ mentor.first_name|slice:":1" }}
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p style="font-weight: 700;">{{ mentor.get_full_name }}</p>
+                        <p style="font-size: 0.875rem; color: var(--muted);">{{ mentor.profile.qualification }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p style="color: var(--muted);">No recommendations yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Your Communities</h2>
+            <div class="flex-col gap-2">
+                {% for community in my_communities %}
+                <div class="card" style="padding: 1rem;">
+                    <p style="font-weight: 700;">{{ community.name }}</p>
+                    <p style="font-size: 0.875rem; color: var(--muted);">{{ community.members.count }} members</p>
+                </div>
+                {% empty %}
+                <p style="color: var(--muted);">Join a community to see it here.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

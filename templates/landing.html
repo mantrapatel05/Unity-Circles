@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid-2" style="min-height: calc(100vh - 4rem);">
+    <div class="flex-center" style="padding: 2rem;">
+        <div style="max-width: 480px; width: 100%;">
+            <h1 style="font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; line-height: 1.1;">
+                Unity Circles
+            </h1>
+            <p style="font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem;">
+                Connect with experienced mentors and peers in your field. Grow together, learn together.
+            </p>
+
+            <div class="card">
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem;">Sign In</h2>
+                
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                        <div style="color: red; margin-bottom: 1rem; font-size: 0.9rem;">
+                            Your username and password didn't match. Please try again.
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <input type="text" name="username" class="input" placeholder="Username" required>
+                    </div>
+                    <div>
+                        <input type="password" name="password" class="input" placeholder="Password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Sign In <i data-lucide="arrow-right" style="margin-left: 8px; width: 20px;"></i>
+                    </button>
+                </form>
+                
+                <p style="text-align: center; margin-top: 1.5rem; color: var(--muted);">
+                    Don't have an account? <a href="{% url 'signup' %}" style="color: var(--primary); font-weight: 700;">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(241, 245, 249, 0.5)); display: flex; align-items: center; justify-content: center; padding: 3rem;">
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80" 
+             alt="Students" 
+             style="width: 100%; height: 80vh; object-fit: cover; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+    </div>
+</div>
+{% endblock %}

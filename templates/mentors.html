@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+    <div style="margin-bottom: 2rem;">
+        <div class="flex-row gap-2" style="margin-bottom: 0.5rem;">
+            <i data-lucide="users" style="color: var(--primary); width: 32px; height: 32px;"></i>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">Find Mentors</h1>
+        </div>
+        <p style="color: var(--muted); font-size: 1.1rem;">Connect with experienced mentors in your field</p>
+    </div>
+
+    <form method="get" style="max-width: 450px; position: relative; margin-bottom: 2rem;">
+        <i data-lucide="search" style="position: absolute; left: 1rem; top: 0.85rem; color: var(--muted); width: 20px;"></i>
+        <input type="text" name="q" class="input" style="padding-left: 3rem; border-radius: 99px;" placeholder="Search mentors..." value="{{ request.GET.q }}">
+    </form>
+
+    <div class="grid-3">
+        {% for mentor in mentors %}
+        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <div class="avatar" style="width: 6rem; height: 6rem; font-size: 2rem; margin-bottom: 1rem;">
+                {% if mentor.profile.photo %}
+                    <img src="{{ mentor.profile.photo.url }}">
+                {% else %}
+                    {{ mentor.first_name|slice:":1" }}
+                {% endif %}
+            </div>
+            
+            <h3 style="font-size: 1.25rem; font-weight: 700;">{{ mentor.get_full_name }}</h3>
+            <p style="font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem;">{{ mentor.profile.qualification }}</p>
+            
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem;">
+                {% for interest in mentor.profile.interests_list %}
+                <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; background: rgba(37,99,235,0.1); color: var(--primary); border-radius: 99px; font-weight: 600;">
+                    {{ interest }}
+                </span>
+                {% endfor %}
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                <a href="{% url 'mentor_detail' mentor.id %}" class="btn btn-outline" style="flex: 1; padding: 0.5rem;">View</a>
+                <a href="{% url 'messages' %}?to={{ mentor.id }}" class="btn btn-primary" style="flex: 1; padding: 0.5rem;">Message</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No mentors found matching your search.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

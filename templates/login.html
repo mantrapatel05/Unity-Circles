@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex-center" style="min-height: calc(100vh - 4rem); background: var(--secondary);">
+    <div style="max-width: 480px; width: 100%; padding: 1rem;">
+        <a href="/" style="display: flex; align-items: center; color: var(--muted); text-decoration: none; margin-bottom: 1.5rem;">
+            <i data-lucide="arrow-left" style="width: 16px; margin-right: 8px;"></i> Back
+        </a>
+        
+        <div class="card">
+            <h1 style="font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Welcome Back</h1>
+            <p style="color: var(--muted); margin-bottom: 2rem;">Sign in to your account</p>
+
+            <form id="loginForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label for="username" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Username</label>
+                    <input type="text" id="username" name="username" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem;">
+                </div>
+
+                <div>
+                    <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Password</label>
+                    <input type="password" id="password" name="password" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem;">
+                </div>
+
+                <div id="errorMessage" style="color: #dc2626; display: none; padding: 0.75rem; background: #fee2e2; border-radius: 0.5rem;"></div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+                    Sign In
+                </button>
+
+                <p style="text-align: center; color: var(--muted);">
+                    Don't have an account? <a href="/signup/" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_BASE_URL = 'http://127.0.0.1:8000';
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const credentials = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/token/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Store tokens
+            localStorage.setItem('access_token', data.access);
+            localStorage.setItem('refresh_token', data.refresh);
+            
+            alert('Login successful! Redirecting to dashboard...');
+            window.location.href = '/dashboard/';
+        } else {
+            document.getElementById('errorMessage').textContent = 'Invalid username or password';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('errorMessage').textContent = 'Network error. Please try again.';
+        document.getElementById('errorMessage').style.display = 'block';
+    }
+});
+</script>
+{% endblock %}
