@@ -1,51 +1,132 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="grid-2" style="min-height: calc(100vh - 4rem);">
+<div class="grid-2" style="min-height: calc(100vh - 4rem); background-color: #F0F4F3;">
     <div class="flex-center" style="padding: 2rem;">
-        <div style="max-width: 480px; width: 100%;">
-            <h1 style="font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; line-height: 1.1;">
+        <div style="max-width: 480px; width: 100%; font-family: 'Quicksand', sans-serif;">
+            
+            <h1 style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #2C3E50;
+                margin-bottom: 1rem;
+                line-height: 1.1;
+                letter-spacing: -0.02em;
+            ">
                 Unity Circles
             </h1>
-            <p style="font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem;">
+
+            <p style="
+                font-size: 1.1rem;
+                color: #5F6F73;
+                margin-bottom: 2rem;
+            ">
                 Connect with experienced mentors and peers in your field. Grow together, learn together.
             </p>
 
-            <div class="card">
-                <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem;">Sign In</h2>
+            <div class="card" style="
+                border-radius: 1.25rem;
+                background-color: #FFFFFF;
+                box-shadow: 0 12px 30px rgba(44, 62, 80, 0.12);
+                border: 1px solid rgba(22, 160, 133, 0.15);
+            ">
+                <h2 style="
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: #2C3E50;
+                    margin-bottom: 1.5rem;
+                    font-family: 'Comfortaa', cursive;
+                ">
+                    Sign In
+                </h2>
                 
                 <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     
                     {% if form.errors %}
-                        <div style="color: red; margin-bottom: 1rem; font-size: 0.9rem;">
+                        <div style="
+                            color: #E67E22;
+                            margin-bottom: 1rem;
+                            font-size: 0.9rem;
+                            font-weight: 600;
+                        ">
                             Your username and password didn't match. Please try again.
                         </div>
                     {% endif %}
 
                     <div>
-                        <input type="text" name="username" class="input" placeholder="Username" required>
+                        <input type="text" name="username" class="input" placeholder="Username" required
+                            style="
+                                border-radius: 0.75rem;
+                                border: 1px solid rgba(44, 62, 80, 0.25);
+                                padding: 0.75rem 1rem;
+                                font-family: 'Quicksand', sans-serif;
+                            ">
                     </div>
+
                     <div>
-                        <input type="password" name="password" class="input" placeholder="Password" required>
+                        <input type="password" name="password" class="input" placeholder="Password" required
+                            style="
+                                border-radius: 0.75rem;
+                                border: 1px solid rgba(44, 62, 80, 0.25);
+                                padding: 0.75rem 1rem;
+                                font-family: 'Quicksand', sans-serif;
+                            ">
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-full">
+                    <button type="submit" class="btn btn-primary btn-full"
+                        style="
+                            background-color: #16A085;
+                            border-radius: 0.9rem;
+                            font-family: 'Fredoka', sans-serif;
+                            font-weight: 600;
+                            letter-spacing: 0.02em;
+                            box-shadow: 0 6px 14px rgba(22, 160, 133, 0.35);
+                        ">
                         Sign In <i data-lucide="arrow-right" style="margin-left: 8px; width: 20px;"></i>
                     </button>
                 </form>
                 
-                <p style="text-align: center; margin-top: 1.5rem; color: var(--muted);">
-                    Don't have an account? <a href="{% url 'signup' %}" style="color: var(--primary); font-weight: 700;">Sign up</a>
+                <p style="
+                    text-align: center;
+                    margin-top: 1.5rem;
+                    color: #5F6F73;
+                    font-size: 0.95rem;
+                ">
+                    Don't have an account?
+                    <a href="{% url 'signup' %}"
+                       style="
+                           color: #E67E22;
+                           font-weight: 700;
+                           text-decoration: none;
+                       ">
+                        Sign up
+                    </a>
                 </p>
             </div>
         </div>
     </div>
     
-    <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(241, 245, 249, 0.5)); display: flex; align-items: center; justify-content: center; padding: 3rem;">
+    <div style="
+        background: linear-gradient(
+            135deg,
+            rgba(22, 160, 133, 0.15),
+            rgba(241, 196, 15, 0.12)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+    ">
         <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80" 
              alt="Students" 
-             style="width: 100%; height: 80vh; object-fit: cover; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+             style="
+                width: 100%;
+                height: 80vh;
+                object-fit: cover;
+                border-radius: 1.75rem;
+                box-shadow: 0 25px 40px rgba(44, 62, 80, 0.18);
+             ">
     </div>
 </div>
 {% endblock %}

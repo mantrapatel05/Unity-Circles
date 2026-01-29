@@ -6,87 +6,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unity Circles - {% block title %}Connect & Grow{% endblock %}</title>
-    
+
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&family=Comfortaa:wght@500;600;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #16A085;
+            --action: #E67E22;
+            --background: #F0F4F3;
+            --muted: #5F6F73;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--background);
+        }
+
+        .navbar {
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .nav-logo {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-link {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            border-radius: 0.75rem;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--action);
+        }
+
+        .avatar {
+            background-color: var(--secondary);
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .mobile-menu-btn i {
+            color: var(--primary);
+        }
+    </style>
 </head>
+
 <body>
 
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="/" class="nav-logo">
-                <i data-lucide="circles" style="color: var(--primary);"></i> Unity Circles
+<nav class="navbar">
+    <div class="container nav-content">
+        <a href="/" class="nav-logo">
+            <i data-lucide="circles" style="color: var(--secondary);"></i>
+            Unity Circles
+        </a>
+
+        <button id="mobile-menu-toggle" class="mobile-menu-btn">
+            <i data-lucide="menu"></i>
+        </button>
+
+        <div class="nav-links" id="nav-links-container">
+            <a href="/dashboard/" class="nav-link">Dashboard</a>
+            <a href="/mentors/" class="nav-link">Mentors</a>
+            <a href="/communities/" class="nav-link">Communities</a>
+            <a href="/meetings/" class="nav-link">Meetings</a>
+            <a href="/messages/" class="nav-link">Messages</a>
+
+            <a href="/profile/" class="avatar" id="profileBtn" style="display:none;">
+                <span id="userInitial">U</span>
             </a>
-            
-            <button id="mobile-menu-toggle" class="mobile-menu-btn">
-                <i data-lucide="menu"></i>
+
+            <button id="logoutBtn" class="nav-link" style="background:none;border:none;cursor:pointer;display:none;">
+                <i data-lucide="log-out" style="width:20px;"></i>
             </button>
 
-            <div class="nav-links" id="nav-links-container">
-                <a href="/dashboard/" class="nav-link">Dashboard</a>
-                <a href="/mentors/" class="nav-link">Mentors</a>
-                <a href="/communities/" class="nav-link">Communities</a>
-                <a href="/meetings/" class="nav-link">Meetings</a>
-                <a href="/messages/" class="nav-link">Messages</a>
-                
-                <a href="/profile/" class="avatar" id="profileBtn" style="display:none;">
-                    <span id="userInitial">U</span>
-                </a>
-                
-                <button id="logoutBtn" class="nav-link" style="background:none; border:none; margin-left:1rem; cursor: pointer; display:none;">
-                    <i data-lucide="log-out" style="width:20px;"></i>
-                </button>
-                
-                <a href="/login/" id="loginBtn" class="nav-link">Login</a>
-                <a href="/signup/" id="signupBtn" class="btn btn-primary" style="height: 2.5rem; font-size: 0.9rem;">Sign Up</a>
-            </div>
+            <a href="/login/" id="loginBtn" class="nav-link">Login</a>
+            <a href="/signup/" id="signupBtn" class="btn btn-primary" style="height:2.5rem;font-size:0.9rem;">
+                Sign Up
+            </a>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+<main>
+    {% block content %}{% endblock %}
+</main>
 
-    <script>
-        // Check authentication status
-        function checkAuth() {
-            const token = localStorage.getItem('access_token');
-            const loginBtn = document.getElementById('loginBtn');
-            const signupBtn = document.getElementById('signupBtn');
-            const profileBtn = document.getElementById('profileBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
+<script>
+    function checkAuth() {
+        const token = localStorage.getItem('access_token');
+        loginBtn.style.display = token ? 'none' : 'inline-block';
+        signupBtn.style.display = token ? 'none' : 'inline-block';
+        profileBtn.style.display = token ? 'inline-flex' : 'none';
+        logoutBtn.style.display = token ? 'inline-block' : 'none';
+    }
 
-            if (token) {
-                // User is logged in
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (signupBtn) signupBtn.style.display = 'none';
-                if (profileBtn) profileBtn.style.display = 'inline-flex';
-                if (logoutBtn) logoutBtn.style.display = 'inline-block';
-            } else {
-                // User is not logged in
-                if (loginBtn) loginBtn.style.display = 'inline-block';
-                if (signupBtn) signupBtn.style.display = 'inline-block';
-                if (profileBtn) profileBtn.style.display = 'none';
-                if (logoutBtn) logoutBtn.style.display = 'none';
-            }
-        }
+    function handleLogout() {
+        localStorage.clear();
+        window.location.href = '/';
+    }
 
-        // Logout function
-        function handleLogout() {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
-            alert('Logged out successfully!');
-            window.location.href = '/';
-        }
+    checkAuth();
+    logoutBtn?.addEventListener('click', handleLogout);
+</script>
 
-        // Initialize
-        checkAuth();
-        if (document.getElementById('logoutBtn')) {
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-        }
-    </script>
-    <script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
