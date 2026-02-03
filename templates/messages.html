@@ -1,59 +1,295 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container" style="padding-top: 2rem;">
-    <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 2rem;">Messages</h1>
+<div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <h1 style="font-size: 2.75rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 2rem;">Messaging</h1>
     
-    <div class="card" style="padding: 0; overflow: hidden; display: grid; grid-template-columns: 300px 1fr; height: 600px;">
-        <div style="border-right: 1px solid var(--border); background: #f8fafc; overflow-y: auto;">
-            <div style="padding: 1rem; border-bottom: 1px solid var(--border); font-weight: 700;">Conversations</div>
-            {% for convo in conversations %}
-            <a href="?user={{ convo.user.id }}" style="display: flex; gap: 0.75rem; padding: 1rem; text-decoration: none; color: inherit; border-bottom: 1px solid rgba(0,0,0,0.05); {% if active_user.id == convo.user.id %}background: #e2e8f0;{% endif %}">
-                <div class="avatar" style="width: 2.5rem; height: 2.5rem;">
-                    {{ convo.user.first_name|slice:":1" }}
+    <div class="card" style="padding: 0; overflow: hidden; display: grid; grid-template-columns: 320px 1fr; height: 700px; border-radius: 1.25rem; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.1);">
+        <!-- Chat Rooms List -->
+        <div style="border-right: 1px solid #e5e7eb; background: #f9fafb; overflow-y: auto; display: flex; flex-direction: column;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; font-weight: 700; font-size: 1.1rem; color: #1f2937;">
+                <i data-lucide="message-square" style="width: 20px; display: inline; margin-right: 0.75rem; color: #667eea;"></i>
+                Chats
+            </div>
+            
+            <button id="newChatBtn" style="margin: 1rem; padding: 0.75rem 1.25rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(102, 126, 234, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <i data-lucide="plus" style="width: 18px;"></i>
+                New Chat
+            </button>
+            
+            <div id="roomsList" style="flex: 1; overflow-y: auto;">
+                <div style="padding: 2rem 1.25rem; color: #6b7280; font-size: 0.95rem; text-align: center;">
+                    <i data-lucide="inbox" style="width: 2rem; height: 2rem; margin: 0 auto 1rem; display: block; opacity: 0.5;"></i>
+                    <p>Loading chats...</p>
                 </div>
-                <div>
-                    <div style="font-weight: 600; font-size: 0.9rem;">{{ convo.user.get_full_name }}</div>
-                    <div style="font-size: 0.8rem; color: var(--muted);">Click to read</div>
-                </div>
-            </a>
-            {% empty %}
-            <div style="padding: 1rem; color: var(--muted); font-size: 0.9rem;">No conversations yet.</div>
-            {% endfor %}
+            </div>
         </div>
 
-        <div style="display: flex; flex-direction: column;">
-            {% if active_user %}
-                <div style="padding: 1rem; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; align-items: center; gap: 0.75rem;">
-                    <div class="avatar" style="width: 2rem; height: 2rem;">{{ active_user.first_name|slice:":1" }}</div>
-                    {{ active_user.get_full_name }}
-                </div>
-
-                <div style="flex: 1; padding: 1.5rem; overflow-y: auto; background: white; display: flex; flex-direction: column; gap: 1rem;">
-                    {% for msg in messages %}
-                    <div style="display: flex; justify-content: {% if msg.sender == user %}flex-end{% else %}flex-start{% endif %};">
-                        <div style="max-width: 70%; padding: 0.75rem 1rem; border-radius: 1rem; {% if msg.sender == user %}background: var(--primary); color: white; border-bottom-right-radius: 0.25rem;{% else %}background: var(--secondary); border-bottom-left-radius: 0.25rem;{% endif %}">
-                            {{ msg.content }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <form method="post" style="padding: 1rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem;">
-                    {% csrf_token %}
-                    <input type="hidden" name="recipient_id" value="{{ active_user.id }}">
-                    <input type="text" name="content" class="input" style="margin: 0; border-radius: 99px;" placeholder="Type a message...">
-                    <button type="submit" class="btn btn-primary" style="border-radius: 50%; width: 3rem; height: 3rem; padding: 0;">
-                        <i data-lucide="send" style="width: 18px;"></i>
-                    </button>
-                </form>
-            {% else %}
-                <div class="flex-center flex-col" style="flex: 1; color: var(--muted);">
-                    <i data-lucide="message-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.3;"></i>
-                    <p>Select a conversation to start messaging</p>
-                </div>
-            {% endif %}
+        <!-- Chat Messages -->
+        <div id="chatView" style="display: flex; flex-direction: column; background: white;">
+            <div class="flex-center flex-col" style="flex: 1; color: #6b7280; background: linear-gradient(135deg, rgba(102, 126, 234, 0.02) 0%, rgba(118, 75, 162, 0.02) 100%);">
+                <i data-lucide="message-circle" style="width: 4rem; height: 4rem; margin-bottom: 1.5rem; opacity: 0.3; color: #667eea;"></i>
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Select a chat to start messaging</p>
+                <p style="font-size: 0.9rem;">Choose a conversation from the list or create a new one</p>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- New Chat Modal -->
+<div id="newChatModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #1f2937;">Start New Chat</h2>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Chat Name</label>
+            <input type="text" id="newRoomName" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif;" placeholder="Enter chat name">
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Description (optional)</label>
+            <textarea id="newRoomDesc" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif;" placeholder="Enter description" rows="3"></textarea>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; flex: 1;">
+                <input type="checkbox" id="newRoomMembersToggle" style="width: 18px; height: 18px; cursor: pointer;">
+                <span style="color: #6b7280;">Add members</span>
+            </label>
+        </div>
+        
+        <div id="newRoomMembersDiv" style="display: none; margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
+            <div id="membersList" style="padding: 1rem;">Loading members...</div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button id="cancelNewChat" style="flex: 1; padding: 0.875rem; border: 1px solid #e5e7eb; background: white; color: #6b7280; font-weight: 600; border-radius: 0.5rem; cursor: pointer;">Cancel</button>
+            <button id="createChatBtn" style="flex: 1; padding: 0.875rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; border: none; border-radius: 0.5rem; cursor: pointer;">Create Chat</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = '/api';
+    let currentRoomId = null;
+    let messagesInterval = null;
+    let roomsInterval = null;
+
+    // Load chat rooms
+    async function loadRooms() {
+        try {
+            const response = await fetch(`${API_URL}/chat/rooms/`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
+            });
+            const rooms = await response.json();
+            
+            const roomsList = document.getElementById('roomsList');
+            if (rooms.length === 0) {
+                roomsList.innerHTML = `
+                    <div style="padding: 2rem 1.25rem; color: #6b7280; font-size: 0.95rem; text-align: center;">
+                        <i data-lucide="inbox" style="width: 2rem; height: 2rem; margin: 0 auto 1rem; display: block; opacity: 0.5;"></i>
+                        <p>No chats yet</p>
+                    </div>
+                `;
+            } else {
+                roomsList.innerHTML = rooms.map(room => `
+                    <a href="#" onclick="selectRoom(${room.id}); return false;" class="room-item" style="display: flex; gap: 1rem; padding: 1rem 1.25rem; text-decoration: none; color: inherit; border-bottom: 1px solid rgba(0,0,0,0.05); transition: all 0.3s; border-left: 3px solid transparent;" data-room-id="${room.id}">
+                        <div class="avatar" style="width: 2.75rem; height: 2.75rem; flex-shrink: 0;">
+                            ${room.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 600; font-size: 0.95rem; color: #1f2937;">${room.name}</div>
+                            <div style="font-size: 0.8rem; color: #9ca3af; margin-top: 0.25rem;">${room.members.length} members</div>
+                        </div>
+                    </a>
+                `).join('');
+                lucide.createIcons();
+            }
+        } catch (error) {
+            console.error('Error loading rooms:', error);
+        }
+    }
+
+    // Select and load a room
+    async function selectRoom(roomId) {
+        currentRoomId = roomId;
+        
+        // Update UI
+        document.querySelectorAll('.room-item').forEach(item => {
+            item.style.backgroundColor = 'transparent';
+            item.style.borderLeftColor = 'transparent';
+        });
+        document.querySelector(`[data-room-id="${roomId}"]`).style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+        document.querySelector(`[data-room-id="${roomId}"]`).style.borderLeftColor = '#667eea';
+        
+        // Load messages
+        loadMessages();
+        
+        // Render chat view
+        const response = await fetch(`${API_URL}/chat/rooms/${roomId}/`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
+        });
+        const room = await response.json();
+        
+        const chatView = document.getElementById('chatView');
+        chatView.innerHTML = `
+            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; font-weight: 700; display: flex; align-items: center; gap: 1rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.02) 0%, rgba(118, 75, 162, 0.02) 100%);">
+                <div style="flex: 1;">
+                    <div style="color: #1f2937; font-size: 1.1rem;">${room.name}</div>
+                    <div style="font-size: 0.75rem; font-weight: 400; color: #6b7280; margin-top: 0.25rem;">${room.members.length} members</div>
+                </div>
+            </div>
+
+            <div id="messagesContainer" style="flex: 1; padding: 1.75rem; overflow-y: auto; background: white; display: flex; flex-direction: column; gap: 1.25rem;">
+                Loading messages...
+            </div>
+
+            <form id="messageForm" style="padding: 1.5rem; border-top: 1px solid #e5e7eb; display: flex; gap: 0.75rem; background: #f9fafb;">
+                <input type="text" id="messageInput" style="margin: 0; border-radius: 99px; border: 1px solid #e5e7eb; padding: 0.875rem 1.25rem; background: white; flex: 1; font-family: 'Quicksand', sans-serif;" placeholder="Type your message..." required>
+                <button type="submit" style="border-radius: 50%; width: 2.75rem; height: 2.75rem; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; color: white;">
+                    <i data-lucide="send" style="width: 18px;"></i>
+                </button>
+            </form>
+        `;
+        
+        lucide.createIcons();
+        
+        // Handle message submission
+        document.getElementById('messageForm').addEventListener('submit', sendMessage);
+        
+        // Load messages repeatedly
+        if (messagesInterval) clearInterval(messagesInterval);
+        messagesInterval = setInterval(loadMessages, 3000);
+    }
+
+    // Load messages
+    async function loadMessages() {
+        if (!currentRoomId) return;
+        
+        try {
+            const response = await fetch(`${API_URL}/chat/messages/?room=${currentRoomId}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
+            });
+            const data = await response.json();
+            const messages = Array.isArray(data) ? data : data.results || [];
+            
+            const container = document.getElementById('messagesContainer');
+            if (!container) return;
+            
+            const currentUserId = JSON.parse(atob(localStorage.getItem('access_token').split('.')[1])).user_id;
+            
+            container.innerHTML = messages.map(msg => `
+                <div style="display: flex; justify-content: ${msg.sender.id === currentUserId ? 'flex-end' : 'flex-start'}; align-items: flex-end; gap: 0.75rem;">
+                    ${msg.sender.id !== currentUserId ? `
+                        <div class="avatar" style="width: 2rem; height: 2rem; flex-shrink: 0;">
+                            ${msg.sender.first_name.charAt(0).toUpperCase()}
+                        </div>
+                    ` : ''}
+                    <div style="max-width: 70%; padding: 0.875rem 1.25rem; border-radius: 1rem; ${msg.sender.id === currentUserId ? 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-bottom-right-radius: 0.25rem;' : 'background: #f3f4f6; color: #1f2937; border-bottom-left-radius: 0.25rem;'}; font-size: 0.95rem; line-height: 1.4;">
+                        <strong>${msg.sender.username}</strong>: ${msg.content}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Auto-scroll to bottom
+            container.scrollTop = container.scrollHeight;
+            lucide.createIcons();
+        } catch (error) {
+            console.error('Error loading messages:', error);
+        }
+    }
+
+    // Send message
+    async function sendMessage(e) {
+        e.preventDefault();
+        const content = document.getElementById('messageInput').value;
+        
+        try {
+            await fetch(`${API_URL}/chat/messages/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ room: currentRoomId, content })
+            });
+            
+            document.getElementById('messageInput').value = '';
+            loadMessages();
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    }
+
+    // New chat modal
+    document.getElementById('newChatBtn').addEventListener('click', () => {
+        document.getElementById('newChatModal').style.display = 'flex';
+        loadUsersForMembers();
+    });
+
+    document.getElementById('cancelNewChat').addEventListener('click', () => {
+        document.getElementById('newChatModal').style.display = 'none';
+    });
+
+    document.getElementById('newRoomMembersToggle').addEventListener('change', (e) => {
+        document.getElementById('newRoomMembersDiv').style.display = e.target.checked ? 'block' : 'none';
+    });
+
+    async function loadUsersForMembers() {
+        try {
+            const response = await fetch(`${API_URL}/auth/users/`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
+            });
+            const users = await response.json();
+            
+            const membersList = document.getElementById('membersList');
+            membersList.innerHTML = users.map(user => `
+                <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; cursor: pointer;">
+                    <input type="checkbox" value="${user.id}" class="member-checkbox">
+                    <span>${user.username}</span>
+                </label>
+            `).join('');
+        } catch (error) {
+            console.error('Error loading users:', error);
+        }
+    }
+
+    document.getElementById('createChatBtn').addEventListener('click', async () => {
+        const name = document.getElementById('newRoomName').value;
+        const description = document.getElementById('newRoomDesc').value;
+        const selectedMembers = Array.from(document.querySelectorAll('.member-checkbox:checked')).map(cb => parseInt(cb.value));
+        
+        try {
+            const response = await fetch(`${API_URL}/chat/rooms/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    description,
+                    members: selectedMembers
+                })
+            });
+            
+            if (response.ok) {
+                document.getElementById('newChatModal').style.display = 'none';
+                document.getElementById('newRoomName').value = '';
+                document.getElementById('newRoomDesc').value = '';
+                loadRooms();
+            }
+        } catch (error) {
+            console.error('Error creating chat:', error);
+        }
+    });
+
+    // Initial load
+    loadRooms();
+    if (roomsInterval) clearInterval(roomsInterval);
+    roomsInterval = setInterval(loadRooms, 10000);
+    
+    lucide.createIcons();
+</script>
+
 {% endblock %}

@@ -21,6 +21,12 @@ class UserRegistrationView(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
+class UserListView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class StudentProfileView(viewsets.ModelViewSet):
     queryset = StudentProfile.objects.all()
     serializer_class = StudentProfileSerializer
