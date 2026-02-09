@@ -1,0 +1,332 @@
+{% extends 'base_mentorship.html' %}
+
+{% block title %}Design System Showcase{% endblock %}
+
+{% block content %}
+<div style="padding: 3rem 0;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h1>Mentorship Design System</h1>
+            <p class="text-secondary" style="font-size: 1.125rem;">
+                Components built with calm authority and warm encouragement
+            </p>
+        </div>
+
+        <!-- Typography Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Typography</h2>
+            
+            <div class="card mb-3">
+                <h3 class="mb-2">Font Families</h3>
+                <div class="grid grid-3 gap-md">
+                    <div>
+                        <p style="font-family: 'Manrope', sans-serif; font-weight: 600; margin-bottom: 0.5rem;">Manrope</p>
+                        <p style="font-family: 'Manrope', sans-serif; font-size: 0.875rem; color: var(--quiet-gray);">
+                            Body & UI - Confident without shouting
+                        </p>
+                    </div>
+                    <div>
+                        <p style="font-family: 'Comfortaa', cursive; font-weight: 600; margin-bottom: 0.5rem;">Comfortaa</p>
+                        <p style="font-family: 'Manrope', sans-serif; font-size: 0.875rem; color: var(--quiet-gray);">
+                            Headings - Calm authority, no sharp edges
+                        </p>
+                    </div>
+                    <div>
+                        <p style="font-family: 'Fredoka', sans-serif; font-weight: 600; margin-bottom: 0.5rem;">Fredoka</p>
+                        <p style="font-family: 'Manrope', sans-serif; font-size: 0.875rem; color: var(--quiet-gray);">
+                            Actions - Warm encouragement
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h1 class="mb-2">Heading 1 - Comfortaa</h1>
+                <h2 class="mb-2">Heading 2 - Comfortaa</h2>
+                <h3 class="mb-2">Heading 3 - Comfortaa</h3>
+                <h4 class="mb-2">Heading 4 - Comfortaa</h4>
+                <p class="mb-1">
+                    Body paragraph - Manrope. This is what most of your content will look like. 
+                    It's clean, readable, and feels confident without being pushy.
+                </p>
+                <small class="text-secondary">Small text / captions - Manrope 14px</small>
+            </div>
+        </section>
+
+        <!-- Colors Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Color Palette</h2>
+            
+            <div class="grid grid-3 gap-md">
+                <!-- Primary Colors -->
+                <div class="card">
+                    <div style="width: 100%; height: 100px; background: var(--mentorship-navy); border-radius: var(--radius-md); margin-bottom: 1rem;"></div>
+                    <h4 class="mb-1">Mentorship Navy</h4>
+                    <p class="text-sm text-secondary">#2C3E50</p>
+                    <p class="text-sm">Primary - Calm authority</p>
+                </div>
+                
+                <div class="card">
+                    <div style="width: 100%; height: 100px; background: var(--peer-teal); border-radius: var(--radius-md); margin-bottom: 1rem;"></div>
+                    <h4 class="mb-1">Peer Teal</h4>
+                    <p class="text-sm text-secondary">#16A085</p>
+                    <p class="text-sm">Secondary - Peer support</p>
+                </div>
+                
+                <div class="card">
+                    <div style="width: 100%; height: 100px; background: var(--soft-sage); border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-light);"></div>
+                    <h4 class="mb-1">Soft Sage</h4>
+                    <p class="text-sm text-secondary">#F0F4F3</p>
+                    <p class="text-sm">Background - Gentle, welcoming</p>
+                </div>
+                
+                <div class="card">
+                    <div style="width: 100%; height: 100px; background: var(--quiet-gray); border-radius: var(--radius-md); margin-bottom: 1rem;"></div>
+                    <h4 class="mb-1">Quiet Gray</h4>
+                    <p class="text-sm text-secondary">#5F6F73</p>
+                    <p class="text-sm">Text muted - Thoughtful</p>
+                </div>
+                
+                <div class="card">
+                    <div style="width: 100%; height: 100px; background: var(--coral-punch); border-radius: var(--radius-md); margin-bottom: 1rem;"></div>
+                    <h4 class="mb-1">Coral Punch</h4>
+                    <p class="text-sm text-secondary">#E67E22</p>
+                    <p class="text-sm">Action - Encouraging energy</p>
+                </div>
+                
+                <div class="card">
+                    <div style="width: 100%; height: 100px; background: var(--soft-gold); border-radius: var(--radius-md); margin-bottom: 1rem;"></div>
+                    <h4 class="mb-1">Soft Gold</h4>
+                    <p class="text-sm text-secondary">#F1C40F</p>
+                    <p class="text-sm">Highlight - Achievement moments</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buttons Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Buttons</h2>
+            
+            <div class="card">
+                <h3 class="mb-3">Button Variants</h3>
+                <div class="flex gap-md mb-4" style="flex-wrap: wrap;">
+                    <button class="btn btn-primary">Primary (Coral Punch)</button>
+                    <button class="btn btn-secondary">Secondary (Peer Teal)</button>
+                    <button class="btn btn-outline">Outline</button>
+                    <button class="btn btn-ghost">Ghost</button>
+                    <button class="btn btn-primary" disabled>Disabled</button>
+                </div>
+                
+                <h3 class="mb-3">Button Sizes</h3>
+                <div class="flex gap-md mb-4" style="align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-sm">Small</button>
+                    <button class="btn btn-primary">Default</button>
+                    <button class="btn btn-primary btn-lg">Large</button>
+                </div>
+                
+                <h3 class="mb-3">With Icons</h3>
+                <div class="flex gap-md mb-4" style="flex-wrap: wrap;">
+                    <button class="btn btn-primary">
+                        <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                        Start your journey
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+                        Join community
+                    </button>
+                    <button class="btn btn-outline">
+                        <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                        Schedule meeting
+                    </button>
+                </div>
+                
+                <h3 class="mb-3">Full Width</h3>
+                <button class="btn btn-primary btn-full">Take the next step</button>
+            </div>
+        </section>
+
+        <!-- Badges Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Badges & Tags</h2>
+            
+            <div class="card">
+                <div class="flex gap-md" style="flex-wrap: wrap;">
+                    <span class="badge badge-primary">
+                        <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                        Active
+                    </span>
+                    <span class="badge badge-accent">
+                        <i data-lucide="star" style="width: 14px; height: 14px;"></i>
+                        New
+                    </span>
+                    <span class="badge badge-highlight">
+                        <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+                        Featured
+                    </span>
+                    <span class="badge badge-success">
+                        <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i>
+                        Completed
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Cards</h2>
+            
+            <div class="grid grid-2 gap-lg">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Card with Header</h3>
+                        <p class="card-subtitle">Supporting text goes here</p>
+                    </div>
+                    <p class="text-secondary mb-3">
+                        This is a card component. It has subtle shadows, rounded corners, 
+                        and a gentle hover effect that lifts it slightly.
+                    </p>
+                    <button class="btn btn-primary">Take action</button>
+                </div>
+                
+                <div class="card">
+                    <div class="flex gap-md mb-3">
+                        <div style="width: 48px; height: 48px; background: var(--peer-teal); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: white;">
+                            <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4>Card with Icon</h4>
+                            <p class="text-sm text-secondary mb-0">Feature description</p>
+                        </div>
+                    </div>
+                    <p class="text-secondary">
+                        Icons help communicate the purpose of each card at a glance.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Forms Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Form Elements</h2>
+            
+            <div class="card" style="max-width: 600px;">
+                <form>
+                    <div class="input-group">
+                        <label class="label">Email address</label>
+                        <input type="email" class="input" placeholder="you@example.com">
+                        <small class="input-hint">We'll never share your email</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Your message</label>
+                        <textarea class="textarea" placeholder="Share your thoughts..."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Select an option</label>
+                        <select class="select">
+                            <option>Choose one...</option>
+                            <option>Option 1</option>
+                            <option>Option 2</option>
+                            <option>Option 3</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Alerts & Messages</h2>
+            
+            <div class="alert alert-success mb-2">
+                <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                <span>Your profile was updated successfully!</span>
+            </div>
+            
+            <div class="alert alert-info mb-2">
+                <i data-lucide="info" style="width: 20px; height: 20px;"></i>
+                <span>New mentorship opportunities are available</span>
+            </div>
+            
+            <div class="alert alert-warning mb-2">
+                <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
+                <span>Please complete your profile to continue</span>
+            </div>
+            
+            <div class="alert alert-error">
+                <i data-lucide="alert-circle" style="width: 20px; height: 20px;"></i>
+                <span>Something went wrong. Please try again</span>
+            </div>
+        </section>
+
+        <!-- Avatar Section -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Avatars</h2>
+            
+            <div class="card">
+                <div class="flex gap-md" style="align-items: center;">
+                    <div class="avatar">JD</div>
+                    <div class="avatar" style="width: 3rem; height: 3rem; font-size: 1.125rem;">SK</div>
+                    <div class="avatar" style="width: 4rem; height: 4rem; font-size: 1.5rem;">MC</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voice & Tone Examples -->
+        <section style="margin-bottom: 4rem;">
+            <h2 class="mb-3">Voice & Tone</h2>
+            
+            <div class="grid grid-2 gap-lg">
+                <div class="card" style="background: rgba(39, 174, 96, 0.05); border-color: var(--success);">
+                    <h3 class="mb-2" style="color: var(--success);">✓ Do This</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.75rem;">
+                            <strong>"Take your time exploring"</strong>
+                            <p class="text-sm text-secondary mb-0">Encouraging, no pressure</p>
+                        </li>
+                        <li style="margin-bottom: 0.75rem;">
+                            <strong>"Here's what I've learned"</strong>
+                            <p class="text-sm text-secondary mb-0">Sharing experience, not lecturing</p>
+                        </li>
+                        <li>
+                            <strong>"Let's work through this together"</strong>
+                            <p class="text-sm text-secondary mb-0">Collaborative, supportive</p>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card" style="background: rgba(231, 76, 60, 0.05); border-color: var(--error);">
+                    <h3 class="mb-2" style="color: var(--error);">✗ Avoid This</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.75rem;">
+                            <strong>"Click here now!"</strong>
+                            <p class="text-sm text-secondary mb-0">Too pushy, marketing-speak</p>
+                        </li>
+                        <li style="margin-bottom: 0.75rem;">
+                            <strong>"You must do this"</strong>
+                            <p class="text-sm text-secondary mb-0">Commanding, not guiding</p>
+                        </li>
+                        <li>
+                            <strong>"Limited time offer"</strong>
+                            <p class="text-sm text-secondary mb-0">Creates false urgency</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script>
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}

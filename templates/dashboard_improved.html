@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div style="margin-bottom: 3rem;">
+        <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+            Welcome back, {{ user.first_name|default:"there" }}!
+        </h1>
+        <p style="font-size: 1.1rem; color: #6b7280;">Here's what's happening in your learning journey</p>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div id="statsContainer" class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 3rem; gap: 1.5rem;">
+        <div class="card" style="padding: 1.75rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(102, 126, 234, 0.02) 100%); border: 1px solid rgba(102, 126, 234, 0.2); cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 25px rgba(102, 126, 234, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="users" style="color: white; width: 1.5rem;"></i>
+                </div>
+                <p style="font-size: 0.875rem; color: #6b7280; font-weight: 600;">Connected Mentors</p>
+            </div>
+            <p id="mentorsCount" style="font-size: 2.5rem; font-weight: 800; color: #1f2937;">{{ stats.mentors_count|default:0 }}</p>
+        </div>
+
+        <div class="card" style="padding: 1.75rem; background: linear-gradient(135deg, rgba(240, 147, 251, 0.05) 0%, rgba(240, 147, 251, 0.02) 100%); border: 1px solid rgba(240, 147, 251, 0.2); cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 25px rgba(240, 147, 251, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="home" style="color: white; width: 1.5rem;"></i>
+                </div>
+                <p style="font-size: 0.875rem; color: #6b7280; font-weight: 600;">My Communities</p>
+            </div>
+            <p id="communitiesCount" style="font-size: 2.5rem; font-weight: 800; color: #1f2937;">{{ stats.communities_count|default:0 }}</p>
+        </div>
+
+        <div class="card" style="padding: 1.75rem; background: linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, rgba(79, 172, 254, 0.02) 100%); border: 1px solid rgba(79, 172, 254, 0.2); cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 25px rgba(79, 172, 254, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="message-circle" style="color: white; width: 1.5rem;"></i>
+                </div>
+                <p style="font-size: 0.875rem; color: #6b7280; font-weight: 600;">New Messages</p>
+            </div>
+            <p id="messagesCount" style="font-size: 2.5rem; font-weight: 800; color: #1f2937;">{{ stats.messages_count|default:0 }}</p>
+        </div>
+
+        <div class="card" style="padding: 1.75rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(102, 126, 234, 0.02) 100%); border: 1px solid rgba(102, 126, 234, 0.2); cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 25px rgba(102, 126, 234, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="calendar" style="color: white; width: 1.5rem;"></i>
+                </div>
+                <p style="font-size: 0.875rem; color: #6b7280; font-weight: 600;">Upcoming Meetings</p>
+            </div>
+            <p id="meetingsCount" style="font-size: 2.5rem; font-weight: 800; color: #1f2937;">{{ stats.meetings_count|default:0 }}</p>
+        </div>
+    </div>
+
+    <div class="grid-2" style="gap: 2.5rem;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Recommended Mentors</h2>
+                <i data-lucide="star" style="color: #f59e0b; width: 1.5rem;"></i>
+            </div>
+            <div class="flex-col gap-2" id="recommendedMentors">
+                {% for mentor in recommended_mentors %}
+                <a href="/mentors/" class="card" style="padding: 1rem; display: flex; align-items: center; gap: 1rem; transition: all 0.3s; cursor: pointer; text-decoration: none;" onmouseover="this.style.boxShadow='0 10px 25px rgba(0,0,0,0.12)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'; this.style.transform='translateY(0)'">
+                    <div class="avatar" style="width: 2.75rem; height: 2.75rem;">
+                        {{ mentor.first_name|slice:":1"|default:"M" }}
+                    </div>
+                    <div style="flex: 1;">
+                        <p style="font-weight: 700; color: #1f2937;">{{ mentor.first_name }} {{ mentor.last_name }}</p>
+                        <p style="font-size: 0.875rem; color: #6b7280;">@{{ mentor.username }}</p>
+                    </div>
+                    <i data-lucide="arrow-right" style="color: #667eea; width: 1.25rem;"></i>
+                </a>
+                {% empty %}
+                <div class="card" style="padding: 2rem; text-align: center;">
+                    <p style="color: #6b7280; margin-bottom: 1rem;">No recommendations yet.</p>
+                    <a href="/mentors/" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: inline-block;">
+                        Browse Mentors
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Your Communities</h2>
+                    <i data-lucide="users-2" style="color: #f59e0b; width: 1.5rem;"></i>
+                </div>
+                <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #6b7280;" title="Refresh">
+                    <i data-lucide="refresh-cw" style="width: 1rem;"></i>
+                    Refresh
+                </button>
+            </div>
+            <div class="flex-col gap-2" id="myCommunitiesContainer">
+                {% for community in my_communities %}
+                <a href="/communities/{{ community.id }}/" class="card" style="padding: 1.5rem; transition: all 0.3s; cursor: pointer; text-decoration: none;" onmouseover="this.style.boxShadow='0 10px 25px rgba(0,0,0,0.12)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'; this.style.transform='translateY(0)'">
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex: 1;">
+                            {% if community.image %}
+                            <img src="{{ community.image.url }}" alt="{{ community.name }}" style="width: 3rem; height: 3rem; border-radius: 0.5rem; object-fit: cover;">
+                            {% else %}
+                            <div class="avatar" style="width: 3rem; height: 3rem; font-size: 1.25rem;">
+                                {{ community.name|slice:":1"|upper }}
+                            </div>
+                            {% endif %}
+                            <div>
+                                <p style="font-weight: 700; color: #1f2937; font-size: 1.05rem;">{{ community.name }}</p>
+                                <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
+                                    <i data-lucide="users" style="width: 1rem;"></i>
+                                    {{ community.members.count }} members
+                                </p>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" style="color: #667eea; width: 1.25rem; flex-shrink: 0;"></i>
+                    </div>
+                </a>
+                {% empty %}
+                <div class="card" style="padding: 2rem; text-align: center;">
+                    <p style="color: #6b7280; margin-bottom: 1rem;">Join a community to see it here.</p>
+                    <a href="/communities/" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: inline-block;">
+                        Explore Communities
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-refresh stats every 30 seconds
+    let refreshInterval;
+
+    async function refreshStats() {
+        try {
+            // Refresh the stats by fetching updated data
+            // Note: In a real implementation, you'd have an API endpoint for this
+            console.log('Refreshing dashboard stats...');
+            
+            // For now, we'll just show a visual indicator
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.opacity = '0.7';
+            });
+            
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.style.opacity = '1';
+                });
+            }, 500);
+        } catch (error) {
+            console.error('Error refreshing stats:', error);
+        }
+    }
+
+    function startAutoRefresh() {
+        refreshInterval = setInterval(() => {
+            refreshStats();
+        }, 30000); // Refresh every 30 seconds
+    }
+
+    // Stop auto-refresh when page is hidden
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(refreshInterval);
+        } else {
+            refreshStats();
+            startAutoRefresh();
+        }
+    });
+
+    // Start auto-refresh on load
+    startAutoRefresh();
+    
+    lucide.createIcons();
+</script>
+{% endblock %}

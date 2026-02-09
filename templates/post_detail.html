@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 3rem; padding-bottom: 4rem; max-width: 900px; margin: 0 auto;">
+    <!-- Back Button -->
+    <a href="/communities/{{ post.community.id }}/" style="display: inline-flex; align-items: center; gap: 0.5rem; color: #667eea; text-decoration: none; margin-bottom: 2rem; font-weight: 600;">
+        <i data-lucide="arrow-left" style="width: 18px;"></i> Back to {{ post.community.name }}
+    </a>
+
+    <!-- Post Card -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <div style="margin-bottom: 1.5rem;">
+            <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin-bottom: 1rem;">{{ post.title }}</h1>
+            <div style="display: flex; align-items: center; gap: 1.5rem; color: #6b7280; font-size: 0.9rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="user" style="width: 16px;"></i>
+                    <span>{{ post.author.username }}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="calendar" style="width: 16px;"></i>
+                    <span>{{ post.created_at|date:"M d, Y" }}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="clock" style="width: 16px;"></i>
+                    <span>{{ post.created_at|time:"g:i A" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="line-height: 1.8; color: #374151; margin-bottom: 2rem; white-space: pre-wrap;">{{ post.content }}</div>
+
+        {% if post.image %}
+        <div style="margin-bottom: 2rem;">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        </div>
+        {% endif %}
+
+        <!-- Vote Buttons -->
+        <div style="display: flex; align-items: center; gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+            <form action="/posts/{{ post.id }}/upvote/" method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i data-lucide="arrow-up" style="width: 18px;"></i>
+                    Upvote ({{ post.upvotes }})
+                </button>
+            </form>
+
+            <form action="/posts/{{ post.id }}/downvote/" method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i data-lucide="arrow-down" style="width: 18px;"></i>
+                    Downvote ({{ post.downvotes }})
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="card">
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="message-circle" style="width: 24px; color: #667eea;"></i>
+            Comments ({{ comments.count }})
+        </h2>
+
+        <!-- Add Comment Form -->
+        <form action="/posts/{{ post.id }}/comment/" method="POST" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #e5e7eb;">
+            {% csrf_token %}
+            <div style="margin-bottom: 1rem;">
+                <label for="content" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Add a comment</label>
+                <textarea name="content" id="content" required style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem; resize: vertical; min-height: 100px;" placeholder="Share your thoughts..."></textarea>
+            </div>
+            <button type="submit" style="padding: 0.75rem 1.75rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                Post Comment
+            </button>
+        </form>
+
+        <!-- Comments List -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {% if comments %}
+                {% for comment in comments %}
+                <div style="padding: 1.25rem; background: #f9fafb; border-radius: 0.75rem; border-left: 3px solid #667eea;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem;">
+                                {{ comment.author.username.0|upper }}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: #1f2937;">{{ comment.author.username }}</div>
+                                <div style="font-size: 0.8rem; color: #6b7280;">{{ comment.created_at|date:"M d, Y g:i A" }}</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: #6b7280; font-size: 0.85rem;">
+                            <i data-lucide="arrow-up" style="width: 14px;"></i>
+                            <span>{{ comment.upvotes }}</span>
+                        </div>
+                    </div>
+                    <p style="color: #374151; line-height: 1.6; margin: 0; white-space: pre-wrap;">{{ comment.content }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                    <i data-lucide="message-circle" style="width: 3rem; height: 3rem; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">No comments yet</p>
+                    <p style="font-size: 0.9rem;">Be the first to share your thoughts!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+{% endblock %}

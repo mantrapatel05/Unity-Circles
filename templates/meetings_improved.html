@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+        <div>
+            <h1 style="font-size: 2.75rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Community Meetings</h1>
+            <p style="color: #6b7280; margin-top: 0.5rem;">Schedule and manage your mentorship sessions</p>
+        </div>
+        <button id="scheduleMeetingBtn" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 0.75rem; padding: 0.875rem 1.75rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; cursor: pointer; border: none;">
+            <i data-lucide="plus" style="width: 20px;"></i> Schedule Meeting
+        </button>
+    </div>
+
+    <div id="errorMessage" style="display: none; color: #dc2626; padding: 1rem; background: #fee2e2; border-radius: 0.5rem; margin-bottom: 1.5rem;"></div>
+
+    <div id="meetingsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
+        <div class="card" style="padding: 2rem; text-align: center; color: #6b7280;">
+            <i data-lucide="calendar" style="width: 3rem; height: 3rem; margin: 0 auto 1rem; opacity: 0.5;"></i>
+            <p>Loading meetings...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Meeting Modal -->
+<div id="scheduleMeetingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+    <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 600px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); margin: 2rem 0;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #1f2937;">Schedule a Meeting</h2>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Meeting Title</label>
+            <input type="text" id="meetingTitle" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem;" placeholder="e.g., Career Discussion">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Description</label>
+            <textarea id="meetingDesc" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem;" placeholder="What will you discuss?" rows="3"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Date</label>
+                <input type="date" id="meetingDate" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem;">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Time</label>
+                <input type="time" id="meetingTime" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Duration (minutes)</label>
+                <input type="number" id="meetingDuration" value="60" min="15" step="15" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem;">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Meeting Link (optional)</label>
+                <input type="url" id="meetingLink" style="width: 100%; padding: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem;" placeholder="https://zoom.us/...">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 600;">Invite Attendees (optional)</label>
+            <div id="attendeesList" style="max-height: 250px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem;">
+                Loading attendees...
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button id="cancelMeeting" style="flex: 1; padding: 0.875rem; border: 1px solid #e5e7eb; background: white; color: #6b7280; font-weight: 600; border-radius: 0.5rem; cursor: pointer;">Cancel</button>
+            <button id="createMeetingBtn" style="flex: 1; padding: 0.875rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; border: none; border-radius: 0.5rem; cursor: pointer;">Create Meeting</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = '/api';
+    let refreshInterval;
+
+    // Get CSRF token
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+    }
+
+    // Get auth token from localStorage
+    function getAuthHeaders() {
+        const token = localStorage.getItem('access_token');
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
+    }
+
+    // Show error message
+    function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    // Load meetings with better error handling
+    async function loadMeetings() {
+        try {
+            const response = await fetch(`${API_URL}/meetings/`, {
+                headers: getAuthHeaders()
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Please log in to view meetings');
+                } else if (response.status === 403) {
+                    throw new Error('You do not have permission to view meetings');
+                } else {
+                    throw new Error(`Failed to load meetings (Status: ${response.status})`);
+                }
+            }
+            
+            const data = await response.json();
+            const meetings = Array.isArray(data) ? data : data.results || [];
+            
+            const meetingsList = document.getElementById('meetingsList');
+            
+            if (meetings.length === 0) {
+                meetingsList.innerHTML = `
+                    <div class="card" style="padding: 2rem; text-align: center; color: #6b7280; grid-column: 1/-1;">
+                        <i data-lucide="calendar" style="width: 3rem; height: 3rem; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">No meetings yet</p>
+                        <p style="font-size: 0.9rem;">Schedule your first meeting to get started</p>
+                    </div>
+                `;
+            } else {
+                meetingsList.innerHTML = meetings.map(meeting => `
+                    <div class="card" style="transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 30px rgba(102, 126, 234, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                            <div>
+                                <h3 style="font-weight: 700; font-size: 1.25rem; color: #1f2937;">${meeting.title}</h3>
+                                <p style="font-size: 0.9rem; color: #667eea; margin-top: 0.25rem;">Hosted by ${meeting.mentor?.first_name || meeting.mentor?.username || 'Unknown'}</p>
+                            </div>
+                            <span style="font-size: 0.75rem; padding: 0.375rem 0.875rem; ${getStatusStyle(meeting.status)}border-radius: 99px; font-weight: 600; text-transform: capitalize;">
+                                ${meeting.status || 'scheduled'}
+                            </span>
+                        </div>
+                        
+                        <p style="color: #6b7280; font-size: 0.95rem; margin-bottom: 1rem;">${meeting.description || 'No description'}</p>
+                        
+                        <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                                <i data-lucide="calendar" style="width: 18px; color: #667eea;"></i> 
+                                ${new Date(meeting.scheduled_time).toLocaleDateString()}
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                                <i data-lucide="clock" style="width: 18px; color: #667eea;"></i> 
+                                ${new Date(meeting.scheduled_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                                <i data-lucide="users" style="width: 18px; color: #667eea;"></i> 
+                                ${meeting.attendees_count || 0} attending
+                            </div>
+                        </div>
+
+                        ${meeting.zoom_link ? `
+                            <a href="${meeting.zoom_link}" target="_blank" style="display: inline-block; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s; margin-bottom: 0.75rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(102, 126, 234, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i data-lucide="video" style="width: 16px; display: inline; margin-right: 0.5rem;"></i>
+                                Join Meeting
+                            </a>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+            
+            lucide.createIcons();
+        } catch (error) {
+            console.error('Error loading meetings:', error);
+            showError(error.message || 'Failed to load meetings. Please refresh the page.');
+            document.getElementById('meetingsList').innerHTML = `
+                <div class="card" style="padding: 2rem; text-align: center; color: #dc2626; grid-column: 1/-1;">
+                    <i data-lucide="alert-circle" style="width: 3rem; height: 3rem; margin: 0 auto 1rem; opacity: 0.5;"></i>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Error loading meetings</p>
+                    <p style="font-size: 0.9rem;">${error.message}</p>
+                    <button onclick="loadMeetings()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 600;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+    }
+
+    function getStatusStyle(status) {
+        switch(status) {
+            case 'completed': return 'background: rgba(34, 197, 94, 0.1); color: #22c55e; ';
+            case 'cancelled': return 'background: rgba(239, 68, 68, 0.1); color: #ef4444; ';
+            case 'ongoing': return 'background: rgba(59, 130, 246, 0.1); color: #3b82f6; ';
+            default: return 'background: rgba(249, 115, 22, 0.1); color: #f97316; ';
+        }
+    }
+
+    // Schedule meeting modal
+    document.getElementById('scheduleMeetingBtn').addEventListener('click', () => {
+        document.getElementById('scheduleMeetingModal').style.display = 'flex';
+        loadAttendeesForModal();
+    });
+
+    document.getElementById('cancelMeeting').addEventListener('click', () => {
+        document.getElementById('scheduleMeetingModal').style.display = 'none';
+    });
+
+    async function loadAttendeesForModal() {
+        try {
+            const response = await fetch(`${API_URL}/auth/users/`, {
+                headers: getAuthHeaders()
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to load users');
+            }
+            
+            const users = await response.json();
+            const attendeesList = document.getElementById('attendeesList');
+            
+            if (users.length === 0) {
+                attendeesList.innerHTML = '<p style="text-align: center; color: #6b7280;">No users available to invite</p>';
+            } else {
+                attendeesList.innerHTML = users.map(user => `
+                    <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; cursor: pointer; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <input type="checkbox" value="${user.id}" class="attendee-checkbox" style="width: 1.125rem; height: 1.125rem; cursor: pointer;">
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #1f2937;">${user.first_name || user.username}</div>
+                            <div style="font-size: 0.85rem; color: #6b7280;">@${user.username}</div>
+                        </div>
+                    </label>
+                `).join('');
+            }
+        } catch (error) {
+            console.error('Error loading attendees:', error);
+            document.getElementById('attendeesList').innerHTML = `
+                <p style="text-align: center; color: #dc2626;">Failed to load users</p>
+            `;
+        }
+    }
+
+    document.getElementById('createMeetingBtn').addEventListener('click', async () => {
+        const title = document.getElementById('meetingTitle').value.trim();
+        const description = document.getElementById('meetingDesc').value.trim();
+        const date = document.getElementById('meetingDate').value;
+        const time = document.getElementById('meetingTime').value;
+        const duration = parseInt(document.getElementById('meetingDuration').value);
+        const zoom_link = document.getElementById('meetingLink').value.trim();
+        const selectedAttendees = Array.from(document.querySelectorAll('.attendee-checkbox:checked')).map(cb => parseInt(cb.value));
+        
+        if (!title || !date || !time) {
+            showError('Please fill in all required fields (Title, Date, Time)');
+            return;
+        }
+        
+        const scheduledTime = new Date(`${date}T${time}`).toISOString();
+        
+        try {
+            const response = await fetch(`${API_URL}/meetings/`, {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({
+                    title,
+                    description,
+                    scheduled_time: scheduledTime,
+                    duration_minutes: duration,
+                    zoom_link: zoom_link || null,
+                    attendees: selectedAttendees
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to create meeting');
+            }
+            
+            document.getElementById('scheduleMeetingModal').style.display = 'none';
+            document.getElementById('meetingTitle').value = '';
+            document.getElementById('meetingDesc').value = '';
+            document.getElementById('meetingDate').value = '';
+            document.getElementById('meetingTime').value = '';
+            document.getElementById('meetingDuration').value = '60';
+            document.getElementById('meetingLink').value = '';
+            loadMeetings();
+        } catch (error) {
+            console.error('Error creating meeting:', error);
+            showError('Failed to create meeting. Please try again.');
+        }
+    });
+
+    // Auto-refresh every 30 seconds
+    function startAutoRefresh() {
+        refreshInterval = setInterval(() => {
+            loadMeetings();
+        }, 30000); // Refresh every 30 seconds
+    }
+
+    // Stop auto-refresh when page is hidden
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(refreshInterval);
+        } else {
+            loadMeetings();
+            startAutoRefresh();
+        }
+    });
+
+    // Initial load
+    loadMeetings();
+    startAutoRefresh();
+    
+    lucide.createIcons();
+</script>
+
+{% endblock %}

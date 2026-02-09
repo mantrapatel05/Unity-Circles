@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<style>
+.profile-container {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: white;
+    color: #667eea;
+    font-size: 3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.profile-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-cancel {
+    background: #f3f4f6;
+    color: #6b7280;
+    margin-left: 1rem;
+}
+
+.btn-cancel:hover {
+    background: #e5e7eb;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.stat-label {
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.username|first|upper }}
+        </div>
+        <h1 style="margin: 0;">{{ user.username }}</h1>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">{{ user.email }}</p>
+    </div>
+
+    <div class="profile-stats">
+        <div class="stat-card">
+            <div class="stat-value">{{ user.communities.count }}</div>
+            <div class="stat-label">Communities</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ user.community_posts.count }}</div>
+            <div class="stat-label">Posts</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ user.dm_sent.count }}</div>
+            <div class="stat-label">Messages</div>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <h2 style="margin-top: 0;">Edit Profile</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" 
+                           value="{{ user.first_name }}" placeholder="Enter first name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" 
+                           value="{{ user.last_name }}" placeholder="Enter last name">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" 
+                       value="{{ user.email }}" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" class="form-control">
+                    <option value="student" {% if profile.role == 'student' %}selected{% endif %}>Student</option>
+                    <option value="mentor" {% if profile.role == 'mentor' %}selected{% endif %}>Mentor</option>
+                    <option value="both" {% if profile.role == 'both' %}selected{% endif %}>Both</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="interests">Interests</label>
+                <input type="text" id="interests" name="interests" class="form-control" 
+                       value="{{ profile.interests }}" placeholder="E.g., Python, Machine Learning, Design">
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" class="form-control" 
+                          placeholder="Tell us about yourself...">{{ profile.bio }}</textarea>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end;">
+                <a href="/dashboard/" class="btn btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

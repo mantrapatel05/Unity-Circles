@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex-center" style="min-height: calc(100vh - 4rem); background: var(--secondary); padding: 2rem;">
+    <div style="max-width: 600px; width: 100%;">
+        <a href="/communities/" style="display: flex; align-items: center; color: var(--muted); text-decoration: none; margin-bottom: 1.5rem;">
+            <i data-lucide="arrow-left" style="width: 16px; margin-right: 8px;"></i> Back to Communities
+        </a>
+        
+        <div class="card">
+            <h1 style="font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Create Community</h1>
+            <p style="color: var(--muted); margin-bottom: 2rem;">Start a new community and bring people together</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                <div style="color: {% if message.tags == 'error' %}#dc2626{% else %}#16a34a{% endif %}; padding: 0.75rem; background: {% if message.tags == 'error' %}#fee2e2{% else %}#dcfce7{% endif %}; border-radius: 0.5rem; margin-bottom: 1rem;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1rem;">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="name" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Community Name *</label>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           required 
+                           placeholder="e.g., Web Developers"
+                           style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem;">
+                </div>
+
+                <div>
+                    <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Description *</label>
+                    <textarea id="description" 
+                              name="description" 
+                              rows="4" 
+                              required
+                              placeholder="Describe what your community is about..."
+                              style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+
+                <div>
+                    <label for="category" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Category *</label>
+                    <select id="category" 
+                            name="category" 
+                            required
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; font-size: 1rem;">
+                        <option value="">Select a category</option>
+                        <option value="tech">Technology</option>
+                        <option value="business">Business</option>
+                        <option value="arts">Arts</option>
+                        <option value="science">Science</option>
+                        <option value="health">Health</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="image" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Community Image (optional)</label>
+                    <input type="file" 
+                           id="image" 
+                           name="image" 
+                           accept="image/*"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 0.5rem;">
+                    <p style="font-size: 0.875rem; color: var(--muted); margin-top: 0.5rem;">Upload an image to represent your community</p>
+                </div>
+
+                <button type="submit" 
+                        style="width: 100%; padding: 0.75rem; margin-top: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+                    Create Community
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+  lucide.createIcons();
+</script>
+{% endblock %}

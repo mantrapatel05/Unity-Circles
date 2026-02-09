@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container" style="padding-top:3rem; padding-bottom:4rem;">
+
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3rem;">
+    <div>
+      <div class="flex-row gap-2" style="margin-bottom:.5rem;">
+        <i data-lucide="users"
+           style="
+             background:linear-gradient(135deg,#667eea,#764ba2);
+             -webkit-background-clip:text;
+             -webkit-text-fill-color:transparent;
+             width:2.5rem;
+             height:2.5rem;">
+        </i>
+
+        <h1 style="
+            font-size:2.75rem;
+            font-weight:800;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;">
+          Find Your Perfect Mentor
+        </h1>
+      </div>
+
+      <p style="color:#6b7280;font-size:1.1rem;">
+        Connect with experienced mentors in your field and accelerate your growth
+      </p>
+    </div>
+
+    <a href="/mentors/register/"
+       style="
+         padding:.75rem 1.25rem;
+         background:linear-gradient(135deg,#667eea,#764ba2);
+         color:white;
+         border-radius:.75rem;
+         font-weight:600;
+         text-decoration:none;">
+      Register as Mentor
+    </a>
+  </div>
+
+  <!-- Mentors Grid -->
+  <div class="grid-3" style="gap:2rem;">
+
+    {% for mentor in mentors %}
+    <div class="card mentor-card"
+         data-mentor-id="{{ mentor.user.id }}"
+         data-mentor-username="{{ mentor.user.username }}"
+         style="
+           display:flex;
+           flex-direction:column;
+           align-items:center;
+           text-align:center;
+           padding:2rem;
+         ">
+
+      <div class="avatar"
+           style="
+             width:5.5rem;
+             height:5.5rem;
+             font-size:1.75rem;
+             margin-bottom:1.25rem;">
+        {{ mentor.user.username|slice:":1"|upper }}
+      </div>
+
+      <h3 class="mentor-username" style="font-size:1.25rem;font-weight:700;color:#1f2937;">
+        Mentor #{{ mentor.id }}
+      </h3>
+
+      <p style="font-size:.9rem;color:#667eea;font-weight:600;margin-bottom:.75rem;">
+        {{ mentor.field }}
+      </p>
+
+      <p style="color:#6b7280;font-size:.95rem;margin-bottom:1.25rem;">
+        {{ mentor.expertise }}
+      </p>
+
+      <p style="color:#4b5563;font-size:.9rem;">
+        {{ mentor.bio }}
+      </p>
+
+      <!-- Message Button -->
+      {% if request.user.is_authenticated and request.user != mentor.user %}
+        <button class="message-mentor-btn"
+           data-user-id="{{ mentor.user.id }}"
+           data-username="{{ mentor.user.username }}"
+           style="
+             margin-top:1rem;
+             padding:.6rem 1rem;
+             background:linear-gradient(135deg,#667eea,#764ba2);
+             color:white;
+             border:none;
+             border-radius:.75rem;
+             font-weight:600;
+             cursor:pointer;
+             display:inline-block;">
+          Message Mentor
+        </button>
+      {% elif not request.user.is_authenticated %}
+        <a href="/login/"
+           style="
+             margin-top:1rem;
+             padding:.6rem 1rem;
+             border:1px solid #667eea;
+             color:#667eea;
+             border-radius:.75rem;
+             text-decoration:none;
+             font-weight:600;
+             display:inline-block;">
+          Login to Contact
+        </a>
+      {% endif %}
+
+    </div>
+    {% empty %}
+    <div style="grid-column:1/-1; text-align:center; padding:3rem;">
+      <p style="color:#6b7280;">No mentors found.</p>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // Handle message button clicks - reveal username and redirect to chat
+  document.querySelectorAll('.message-mentor-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const userId = this.dataset.userId;
+      const username = this.dataset.username;
+      const card = this.closest('.mentor-card');
+      const usernameElement = card.querySelector('.mentor-username');
+      
+      // Reveal the username
+      usernameElement.textContent = username;
+      usernameElement.style.color = '#667eea';
+      
+      // Redirect to chat after a brief moment
+      setTimeout(() => {
+        window.location.href = '/chat/?to=' + userId;
+      }, 500);
+    });
+  });
+</script>
+
+{% endblock %}

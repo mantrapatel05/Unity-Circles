@@ -1,0 +1,341 @@
+{% extends 'base_mentorship.html' %}
+
+{% block title %}Connect, Learn, Grow Together{% endblock %}
+
+{% block content %}
+<style>
+    /* Hero Section */
+    .hero {
+        padding: 4rem 0;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(22, 160, 133, 0.03) 0%, rgba(240, 244, 243, 0.5) 100%);
+    }
+    
+    .hero-title {
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--mentorship-navy) 0%, var(--peer-teal) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--quiet-gray);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+    }
+    
+    /* Features Section */
+    .features {
+        padding: 4rem 0;
+    }
+    
+    .feature-card {
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1.5rem;
+        background: linear-gradient(135deg, var(--peer-teal) 0%, var(--mentorship-navy) 100%);
+        border-radius: var(--radius-xl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    
+    /* Stats Section */
+    .stats {
+        background: var(--white);
+        padding: 3rem 0;
+        border-top: 1px solid var(--border-light);
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-family: 'Comfortaa', cursive;
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--peer-teal) 0%, var(--mentorship-navy) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: var(--quiet-gray);
+        font-weight: 600;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        padding: 4rem 0;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(230, 126, 34, 0.05) 0%, rgba(240, 244, 243, 0.5) 100%);
+    }
+    
+    /* Testimonial */
+    .testimonial {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
+        position: relative;
+    }
+    
+    .quote-icon {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        background: var(--coral-punch);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1 class="hero-title">Your journey starts with connection</h1>
+        <p class="hero-subtitle">
+            Unity Circles brings together students and mentors in a supportive community 
+            where growth happens naturally, at your own pace.
+        </p>
+        
+        <div class="flex-center gap-md" style="margin-top: 2rem;">
+            <a href="/signup/" class="btn btn-primary btn-lg">
+                <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                Start your journey
+            </a>
+            <a href="#features" class="btn btn-outline btn-lg">
+                Learn how it works
+            </a>
+        </div>
+        
+        <div style="margin-top: 3rem;">
+            <span class="badge badge-primary">
+                <i data-lucide="users" style="width: 14px; height: 14px;"></i>
+                1,000+ active members
+            </span>
+            <span class="badge badge-highlight" style="margin-left: 0.5rem;">
+                <i data-lucide="star" style="width: 14px; height: 14px;"></i>
+                500+ mentorship matches
+            </span>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats">
+    <div class="container">
+        <div class="grid grid-3">
+            <div class="stat-item">
+                <div class="stat-number">1,000+</div>
+                <div class="stat-label">Community Members</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Mentorship Connections</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Study Circles</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" id="features">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2>Everything you need to grow</h2>
+            <p class="text-secondary" style="max-width: 600px; margin: 0 auto;">
+                We've built a space where learning feels natural, connections feel genuine, 
+                and progress happens one step at a time.
+            </p>
+        </div>
+        
+        <div class="grid grid-3">
+            <!-- Feature 1 -->
+            <div class="card feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="users" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3 class="card-title">Find Your People</h3>
+                <p class="text-secondary">
+                    Join communities built around shared interests, goals, and experiences. 
+                    Connect with peers who understand your journey.
+                </p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="card feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="compass" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3 class="card-title">Get Guided</h3>
+                <p class="text-secondary">
+                    Match with mentors who've walked this path before. Get personalized 
+                    guidance when you need it, at your own pace.
+                </p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="card feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="calendar" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3 class="card-title">Stay Connected</h3>
+                <p class="text-secondary">
+                    Schedule meetings, join study sessions, and participate in community 
+                    events that keep you moving forward.
+                </p>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="card feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="message-circle" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3 class="card-title">Share & Learn</h3>
+                <p class="text-secondary">
+                    Post updates, ask questions, and celebrate wins with a community that 
+                    genuinely wants to see you succeed.
+                </p>
+            </div>
+            
+            <!-- Feature 5 -->
+            <div class="card feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="trending-up" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3 class="card-title">Track Progress</h3>
+                <p class="text-secondary">
+                    See how far you've come with milestones, achievements, and reflections 
+                    on your personal growth journey.
+                </p>
+            </div>
+            
+            <!-- Feature 6 -->
+            <div class="card feature-card">
+                <div class="feature-icon">
+                    <i data-lucide="shield" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3 class="card-title">Safe Space</h3>
+                <p class="text-secondary">
+                    A judgment-free zone where questions are welcome, mistakes are learning 
+                    opportunities, and everyone supports each other.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial Section -->
+<section style="padding: 4rem 0; background: var(--soft-sage);">
+    <div class="container">
+        <div class="testimonial">
+            <div class="quote-icon">
+                <i data-lucide="quote" style="width: 20px; height: 20px;"></i>
+            </div>
+            <p style="font-size: 1.125rem; line-height: 1.7; color: var(--mentorship-navy); margin-bottom: 1.5rem; font-style: italic;">
+                "Unity Circles changed how I approach learning. Instead of feeling lost, I have 
+                a community that understands where I am and mentors who remember being in my shoes. 
+                It doesn't feel like networking—it feels like family."
+            </p>
+            <div class="flex-center gap-md">
+                <div class="avatar" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                    S
+                </div>
+                <div style="text-align: left;">
+                    <div style="font-weight: 600; color: var(--mentorship-navy);">Sarah Chen</div>
+                    <div style="font-size: 0.875rem; color: var(--quiet-gray);">Computer Science Student</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2>How it works</h2>
+            <p class="text-secondary">Getting started takes just a few minutes</p>
+        </div>
+        
+        <div class="grid grid-3">
+            <div style="text-align: center;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: var(--soft-sage); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Comfortaa', cursive; font-size: 1.5rem; font-weight: 700; color: var(--peer-teal);">
+                    1
+                </div>
+                <h3>Create your profile</h3>
+                <p class="text-secondary">Share your interests, goals, and what you're looking to learn</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: var(--soft-sage); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Comfortaa', cursive; font-size: 1.5rem; font-weight: 700; color: var(--peer-teal);">
+                    2
+                </div>
+                <h3>Find your fit</h3>
+                <p class="text-secondary">Explore communities and connect with mentors who align with your journey</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: var(--soft-sage); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Comfortaa', cursive; font-size: 1.5rem; font-weight: 700; color: var(--peer-teal);">
+                    3
+                </div>
+                <h3>Start growing</h3>
+                <p class="text-secondary">Join conversations, attend meetings, and take your next steps forward</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2 style="margin-bottom: 1rem;">Ready to take the next step?</h2>
+        <p class="text-secondary" style="margin-bottom: 2rem; font-size: 1.125rem;">
+            Join a community that's here to support your growth—no pressure, just progress.
+        </p>
+        <div class="flex-center gap-md">
+            <a href="/signup/" class="btn btn-primary btn-lg">
+                Create your free account
+            </a>
+            <a href="/login/" class="btn btn-ghost btn-lg">
+                Already have an account?
+            </a>
+        </div>
+        <p style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--muted);">
+            Free forever. No credit card required.
+        </p>
+    </div>
+</section>
+
+<script>
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}
